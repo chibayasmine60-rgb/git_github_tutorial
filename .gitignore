@@ -1,0 +1,4 @@
+/backend/venv/
+backend/venv/
+backend/data/df_final.csv
+__pycache__/
