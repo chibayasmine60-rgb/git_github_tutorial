@@ -17,7 +17,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import "./App.css";
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL =  "https://caring-charisma-production-d0b9.up.railway.app";
 
 const MAP_CENTER = [28.0, 2.5];
 const MAP_ZOOM = 5;
