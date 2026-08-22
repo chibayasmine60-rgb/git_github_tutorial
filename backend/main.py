@@ -5,7 +5,8 @@ import tensorflow as tf
 import joblib
 import numpy as np
 import pandas as pd
-
+import requests
+import os
 app = FastAPI(
     title="Algeria Drought Prediction API",
     description="AI-powered drought prediction using LSTM, SPEI and ERA5-Land climate data",
@@ -26,11 +27,30 @@ app.add_middleware(
 # Paths
 # =====================================================
 
-MODEL_PATH = "model/best_model_two_dataset.keras"
-FEATURE_SCALER_PATH = "model/feature_scaler.pkl"
-TARGET_SCALER_PATH = "model/target_scaler.pkl"
-DATASET_PATH = "data/df_final.csv"
+MODEL_PATH = "backend/model/best_model_two_dataset.keras"
+FEATURE_SCALER_PATH = "backend/model/feature_scaler.pkl"
+TARGET_SCALER_PATH = "backend/model/target_scaler.pkl"
+DATASET_URL = "https://huggingface.co/datasets/yasmine-ai/algeria-drought-data/resolve/main/df_final.csv"
+DATASET_PATH = "backend/data/df_final.csv"
 
+# =====================================================
+# Download dataset from Hugging Face if not available
+# =====================================================
+
+if not os.path.exists(DATASET_PATH):
+    print("Downloading dataset from Hugging Face...")
+
+    os.makedirs("data", exist_ok=True)
+
+    response = requests.get(DATASET_URL, stream=True)
+    response.raise_for_status()
+
+    with open(DATASET_PATH, "wb") as f:
+        for chunk in response.iter_content(chunk_size=1024 * 1024):
+            if chunk:
+                f.write(chunk)
+
+    print("Dataset downloaded successfully.")
 # =====================================================
 # Features used during training
 # =====================================================
